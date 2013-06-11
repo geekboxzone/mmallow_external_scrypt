@@ -1,0 +1,3 @@
+bionic.patch:
+
+Allows scrypt to compile against bionic.
