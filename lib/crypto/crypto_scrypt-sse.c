@@ -37,7 +37,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef USE_OPENSSL_PBKDF2
+#include <openssl/evp.h>
+#else
 #include "sha256.h"
+#endif
 #include "sysendian.h"
 
 #include "crypto_scrypt.h"
@@ -332,7 +336,11 @@ crypto_scrypt(const uint8_t * passwd, size_t passwdlen,
 #endif
 
 	/* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
+#ifdef USE_OPENSSL_PBKDF2
+	PKCS5_PBKDF2_HMAC((const char *)passwd, passwdlen, salt, saltlen, 1, EVP_sha256(), p * 128 * r, B);
+#else
 	PBKDF2_SHA256(passwd, passwdlen, salt, saltlen, 1, B, p * 128 * r);
+#endif
 
 	/* 2: for i = 0 to p - 1 do */
 	for (i = 0; i < p; i++) {
@@ -341,7 +349,11 @@ crypto_scrypt(const uint8_t * passwd, size_t passwdlen,
 	}
 
 	/* 5: DK <-- PBKDF2(P, B, 1, dkLen) */
+#ifdef USE_OPENSSL_PBKDF2
+	PKCS5_PBKDF2_HMAC((const char *)passwd, passwdlen, B, p * 128 * r, 1, EVP_sha256(), buflen, buf);
+#else
 	PBKDF2_SHA256(passwd, passwdlen, B, p * 128 * r, 1, buf, buflen);
+#endif
 
 	/* Free memory. */
 #ifdef MAP_ANON
