@@ -37,9 +37,11 @@ common_c_includes := \
 
 arm_c_flags :=
 
-arm_src_files :=
+arm_src_files := \
+  lib/crypto/crypto_scrypt-neon.c \
 
-arm_exclude_files :=
+arm_exclude_files := \
+  lib/crypto/crypto_scrypt-ref.c \
 
 x86_c_flags :=
 
