@@ -262,7 +262,7 @@ print_defines_in_mk() {
 # $1: Target file name.  (e.g. Scrypt-config.mk)
 function generate_config_mk() {
   declare -r output="$1"
-  declare -r all_archs="arm x86 x86_64 mips"
+  declare -r all_archs="arm arm_neon x86 x86_64 mips"
 
   echo "Generating $(basename $output)"
   (
@@ -323,6 +323,15 @@ target_c_flags    := \$(common_c_flags) \$(\$(target_arch)_c_flags) \$(local_c_f
 target_c_includes := \$(addprefix external/scrypt/,\$(common_c_includes)) \$(local_c_includes)
 target_src_files  := \$(common_src_files) \$(\$(target_arch)_src_files)
 target_src_files  := \$(filter-out \$(\$(target_arch)_exclude_files), \$(target_src_files))
+
+# Hacks for ARM NEON support
+ifeq (\$(target_arch),arm)
+ifeq (\$(ARCH_ARM_HAVE_NEON),true)
+target_c_flags   += \$(arm_neon_c_flags)
+target_src_files += \$(arm_neon_src_files)
+target_src_files := \$(filter-out \$(arm_neon_exclude_files), \$(target_src_files))
+endif
+endif
 
 ifeq (\$(HOST_OS)-\$(HOST_ARCH),linux-x86)
 host_arch := x86
