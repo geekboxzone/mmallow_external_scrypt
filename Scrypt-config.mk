@@ -37,10 +37,16 @@ common_c_includes := \
 
 arm_c_flags :=
 
-arm_src_files := \
+arm_src_files :=
+
+arm_exclude_files :=
+
+arm_neon_c_flags :=
+
+arm_neon_src_files := \
   lib/crypto/crypto_scrypt-neon.c \
 
-arm_exclude_files := \
+arm_neon_exclude_files := \
   lib/crypto/crypto_scrypt-ref.c \
 
 x86_c_flags :=
@@ -74,6 +80,15 @@ target_c_flags    := $(common_c_flags) $($(target_arch)_c_flags) $(local_c_flags
 target_c_includes := $(addprefix external/scrypt/,$(common_c_includes)) $(local_c_includes)
 target_src_files  := $(common_src_files) $($(target_arch)_src_files)
 target_src_files  := $(filter-out $($(target_arch)_exclude_files), $(target_src_files))
+
+# Hacks for ARM NEON support
+ifeq ($(target_arch),arm)
+ifeq ($(ARCH_ARM_HAVE_NEON),true)
+target_c_flags   += $(arm_neon_c_flags)
+target_src_files += $(arm_neon_src_files)
+target_src_files := $(filter-out $(arm_neon_exclude_files), $(target_src_files))
+endif
+endif
 
 ifeq ($(HOST_OS)-$(HOST_ARCH),linux-x86)
 host_arch := x86
