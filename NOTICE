@@ -26,3 +26,11 @@
  * This file was originally written by Colin Percival as part of the Tarsnap
  * online backup system.
  */
+
+/*
+ * version 20110505
+ * D. J. Bernstein
+ * Public domain.
+ *
+ * Based on crypto_core/salsa208/armneon/core.c from SUPERCOP 20130419
+ */

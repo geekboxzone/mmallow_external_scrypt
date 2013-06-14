@@ -351,8 +351,6 @@ function import() {
 
   generate_build_config_mk ../build-config.mk
 
-  # Extract license from source file
-  sed '/^\/\*-/,/^ \*\//!d' lib/crypto/crypto_scrypt.h > ../NOTICE
   touch ../MODULE_LICENSE_BSD_LIKE
 
   cd ..
