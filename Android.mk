@@ -9,3 +9,5 @@ LOCAL_PATH := $(call my-dir)
 # that import_openssl.sh import won't remove them.
 include $(LOCAL_PATH)/build-config.mk
 include $(LOCAL_PATH)/Scrypt.mk
+
+include $(call all-named-subdir-makefiles,tests)
