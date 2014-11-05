@@ -19,8 +19,6 @@ LOCAL_SHARED_LIBRARIES := \
 
 LOCAL_STATIC_LIBRARIES := \
     libscrypt_static \
-    libgtest \
-    libgtest_main
 
 LOCAL_MODULE := scrypt_test
 
